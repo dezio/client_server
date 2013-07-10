@@ -16,24 +16,43 @@ using DeZio.Networking.Packet;
 #endregion
 
 namespace DeZio.Networking {
-    public class MessageIO {
+    public class MessageIO : IDisposable {
         private bool m_bStarted = false;
         private bool m_bUseCrypto = false;
 
+        /// <summary>
+        /// Initializes a new MessageIO object.
+        /// </summary>
+        /// <param name="stream">The networkstream to Read/Write</param>
+        /// <param name="contextName">A name for this reader <example>e.g. Client or Server</example></param>
         public MessageIO(NetworkStream stream, String contextName) {
             Stream = stream;
             Context = contextName;
         }
 
+        ~MessageIO() {
+            this.Dispose();
+        }
+
         private String Context { get; set; }
         protected NetworkStream Stream { get; set; }
         private Session CurrentSession { get; set; }
+        /// <summary>
+        /// Will be raised when a packet was arrived.
+        /// </summary>
         public event EventHandler PacketArrived;
 
+        /// <summary>
+        /// Sets the session.
+        /// </summary>
+        /// <param name="currentSession">The session.</param>
         public void SetSession(Session currentSession) {
             CurrentSession = currentSession;
         }
 
+        /// <summary>
+        /// Starts the reader.
+        /// </summary>
         public void Start() {
             if (!m_bStarted) {
                 m_bStarted = true;
@@ -44,11 +63,18 @@ namespace DeZio.Networking {
             } // else end
         }
 
+        /// <summary>
+        /// Stops the reader and closes the stream.
+        /// </summary>
         public void Stop() {
             m_bStarted = false;
             Stream.Close();
         }
 
+        /// <summary>
+        /// Reads the stream in a loop and raises <see cref="PacketArrived">PacketArrived</see>
+        /// when a packet arrived.
+        /// </summary>
         private void ReadLoop() {
             while (m_bStarted) {
                 Console.WriteLine(string.Format("MessageIO[{0}]: Waiting for input.", Context));
@@ -83,6 +109,11 @@ namespace DeZio.Networking {
             } // while end
         }
 
+        /// <summary>
+        /// Writes a packet to the stream.
+        /// </summary>
+        /// <param name="p">The packet to write.</param>
+        /// <param name="bWithEncKey">Determines whether the encryption is used.</param>
         public void WritePacket(MessagePacket p, bool bWithEncKey = false) {
             Thread.Sleep(50);
             p.Session = CurrentSession;
@@ -109,6 +140,13 @@ namespace DeZio.Networking {
             var streamWriter = new StreamWriter(Stream);
             streamWriter.WriteLine(sbSafePacket);
             streamWriter.Flush();
+        }
+
+        /// <summary>
+        /// Disposes this object.
+        /// </summary>
+        public void Dispose() {
+            this.Stream.Close();
         }
     }
 }
