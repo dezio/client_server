@@ -1,0 +1,6 @@
+﻿* {
+     font-family: Segoe UI;
+}
+div.message p.from {
+     font-weight: bold; padding: 0; margin: 0;
+}
