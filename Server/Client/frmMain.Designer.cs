@@ -39,13 +39,13 @@
             this.treeContacts.ImageIndex = 2;
             this.treeContacts.ImageList = this.imageListContactState;
             this.treeContacts.ItemHeight = 24;
-            this.treeContacts.Location = new System.Drawing.Point(12, 48);
+            this.treeContacts.Location = new System.Drawing.Point(12, 52);
             this.treeContacts.Name = "treeContacts";
             this.treeContacts.SelectedImageIndex = 2;
             this.treeContacts.ShowLines = false;
             this.treeContacts.ShowPlusMinus = false;
             this.treeContacts.ShowRootLines = false;
-            this.treeContacts.Size = new System.Drawing.Size(354, 470);
+            this.treeContacts.Size = new System.Drawing.Size(354, 466);
             this.treeContacts.TabIndex = 0;
             // 
             // imageListContactState

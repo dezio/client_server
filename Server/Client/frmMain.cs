@@ -14,6 +14,7 @@ using DeZio.Networking;
 namespace Client {
     public partial class frmMain : Form {
         private delegate void onNewMessage(GotChatMessageEventArgs ea);
+
         public frmMain() {
             InitializeComponent();
             ChatWindows = new List<frmChatWindow>();

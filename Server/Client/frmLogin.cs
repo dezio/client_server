@@ -6,6 +6,7 @@
 using System;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Microsoft.Win32;
 
 #endregion
 
@@ -15,6 +16,11 @@ namespace Client {
         public frmLogin() {
             InitializeComponent();
             Client = new ClientModel();
+            lblStatus.Text = String.Format("Version {0}", Application.ProductVersion);
+            if (LocalSettings.Get("saveAuth") == true.ToString()) {
+                txtUsername.Text = LocalSettings.Get("username");
+                txtPassword.Text = LocalSettings.Get("pw");
+            } // if end
         }
 
         private ClientModel Client { get; set; }
@@ -32,10 +38,22 @@ namespace Client {
                 this.Invoke(new MethodInvoker(ShowLoading));
                 return;
             } // if end
+            pnlLoading.Dock = DockStyle.Fill;
+            pnlLoading.BringToFront();
             pnlLoading.Visible = m_bLoginLocked = true;
         }
 
         private void bttnLogin_Click(object sender, EventArgs e) {
+            if ((checkSaveAuth).Checked) {
+                LocalSettings.Set("username", txtUsername.Text);
+                LocalSettings.Set("pw", txtPassword.Text);
+                LocalSettings.Set("saveAuth", true.ToString());
+            } // if end
+            else {
+                LocalSettings.Set("username", "");
+                LocalSettings.Set("pw", "");
+                LocalSettings.Set("saveAuth", false.ToString());
+            } // else end
             Task.Run(() => {
                 if (m_bLoginLocked)
                     return;
@@ -59,6 +77,10 @@ namespace Client {
         }
 
         private void frmLogin_Load(object sender, EventArgs e) {
+
+        }
+
+        private void checkSaveAuth_CheckedChanged(object sender, EventArgs e) {
 
         }
     }

@@ -7,6 +7,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
+using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Security.Authentication;
 using System.Text;
@@ -79,6 +80,7 @@ namespace Client {
                             UserId = int.Parse(q["from"]),
                             Username = "Unknown"
                         };
+
                     GotChatMessage(this, new GotChatMessageEventArgs()
                         {
                             From = contact,
@@ -105,6 +107,10 @@ namespace Client {
         }
 
         public void Authenticate(String username, String pw = "") {
+            if (MessagePort < 0) {
+                throw new Exception("You are not connected to the server.");
+            } // if end
+
             WritePacket(new MessagePacket()
                 {
                     Message = string.Format("username={0}&pw={1}", username, pw),

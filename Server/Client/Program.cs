@@ -6,6 +6,7 @@
 using System;
 using System.IO;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 #endregion
@@ -23,11 +24,14 @@ namespace Client {
         /// </summary>
         [STAThread]
         private static void Main() {
-            Client.InitSession();
-            Client.LogInToMessageServer();
+            Task.Factory.StartNew(delegate {
+                Client.InitSession();
+                Client.LogInToMessageServer();
+                Thread.Sleep(500);
+            });
+            
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Thread.Sleep(500);
             var dlgLogin = new frmLogin();
             dlgLogin.ShowDialog();
             if (Client.LoggedIn != false) {

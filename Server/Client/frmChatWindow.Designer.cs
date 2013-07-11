@@ -28,7 +28,7 @@
             this.bttnSend = new System.Windows.Forms.Button();
             this.toolStripMain = new System.Windows.Forms.ToolStrip();
             this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
-            this.pnlChat = new System.Windows.Forms.Panel();
+            this.pnlChat = new System.Windows.Forms.FlowLayoutPanel();
             this.toolStripMain.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -36,12 +36,14 @@
             // 
             this.txtChatOut.AcceptsReturn = true;
             this.txtChatOut.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.txtChatOut.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtChatOut.Location = new System.Drawing.Point(12, 310);
             this.txtChatOut.Multiline = true;
             this.txtChatOut.Name = "txtChatOut";
             this.txtChatOut.Size = new System.Drawing.Size(452, 46);
             this.txtChatOut.TabIndex = 1;
             this.txtChatOut.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtChatOut_KeyDown);
+            this.txtChatOut.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txtChatOut_KeyUp);
             this.txtChatOut.MouseDown += new System.Windows.Forms.MouseEventHandler(this.txtChatOut_MouseDown);
             // 
             // bttnSend
@@ -77,14 +79,18 @@
             // 
             // pnlChat
             // 
-            this.pnlChat.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.pnlChat.AutoScroll = true;
+            this.pnlChat.BackColor = System.Drawing.Color.White;
             this.pnlChat.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pnlChat.Location = new System.Drawing.Point(12, 29);
+            this.pnlChat.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
+            this.pnlChat.Location = new System.Drawing.Point(12, 28);
             this.pnlChat.Name = "pnlChat";
-            this.pnlChat.Size = new System.Drawing.Size(590, 275);
+            this.pnlChat.Size = new System.Drawing.Size(590, 276);
             this.pnlChat.TabIndex = 4;
+            this.pnlChat.WrapContents = false;
+            this.pnlChat.ControlAdded += new System.Windows.Forms.ControlEventHandler(this.pnlChat_ControlAdded);
+            this.pnlChat.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pnlChat_MouseDown);
+            this.pnlChat.MouseEnter += new System.EventHandler(this.pnlChat_MouseEnter);
             // 
             // frmChatWindow
             // 
@@ -95,9 +101,11 @@
             this.Controls.Add(this.toolStripMain);
             this.Controls.Add(this.bttnSend);
             this.Controls.Add(this.txtChatOut);
+            this.KeyPreview = true;
             this.Name = "frmChatWindow";
             this.Text = "Chat with <unknown>";
             this.Shown += new System.EventHandler(this.frmChatWindow_Shown);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.frmChatWindow_KeyDown);
             this.toolStripMain.ResumeLayout(false);
             this.toolStripMain.PerformLayout();
             this.ResumeLayout(false);
@@ -111,7 +119,7 @@
         private System.Windows.Forms.Button bttnSend;
         private System.Windows.Forms.ToolStrip toolStripMain;
         private System.Windows.Forms.ToolStripButton toolStripButton1;
-        private System.Windows.Forms.Panel pnlChat;
+        private System.Windows.Forms.FlowLayoutPanel pnlChat;
 
     }
 }

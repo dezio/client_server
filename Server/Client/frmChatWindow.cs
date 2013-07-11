@@ -36,12 +36,9 @@ namespace Client {
                 Invoke(new onNewMessage(NewMessage), msg);
                 return;
             } // if end
-            
-            var msgView = new Controls.ChatMessageView(ChatMessageView.MessageDirection.Incoming, msg, Remote.Username, DateTime.Now)
-                {
-                    Width = pnlChat.Width,
-                    Location = new Point(0, pnlChat.Controls.Count*40)
-                };
+
+            var msgView = new Controls.ChatMessageView(ChatMessageView.MessageDirection.Incoming, msg, Remote.Username,
+                                                       DateTime.Now);
 
             pnlChat.Controls.Add(msgView);
         }
@@ -76,6 +73,28 @@ namespace Client {
             var textBox = sender as TextBox;
             if (textBox != null) Client.SendMessage(textBox.Text, Remote.UserId);
             txtChatOut.Text = "";
+        }
+
+        private void pnlChat_MouseEnter(object sender, EventArgs e) {
+            
+        }
+
+        private void pnlChat_ControlAdded(object sender, ControlEventArgs e) {
+            (sender as FlowLayoutPanel).ScrollControlIntoView(e.Control);
+        }
+
+        private void pnlChat_MouseDown(object sender, MouseEventArgs e) {
+            (sender as FlowLayoutPanel).Focus();
+        }
+
+        private void frmChatWindow_KeyDown(object sender, KeyEventArgs e) {
+            txtChatOut.Focus();
+        }
+
+        private void txtChatOut_KeyUp(object sender, KeyEventArgs e) {
+            if (e.KeyCode == Keys.Enter) {
+                txtChatOut.Text = "";
+            }
         }
     }
 }

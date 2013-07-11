@@ -77,9 +77,10 @@ namespace Client.Controls {
             this.Controls.Add(m_lblMessage);
 
             this.BackColor = Color.White;
-            this.AutoSize = true;
-            this.AutoSizeMode = AutoSizeMode.GrowOnly;
-            this.Padding = new Padding(4);
+            this.Height = m_lblMessage.Height + m_lblSender.Height + 28;
+            this.Width = m_lblMessage.Width + 10;
+            this.Padding = new Padding(5);
+            this.Margin = new Padding(5);
         }
 
         protected override void OnPaint(PaintEventArgs e) {
