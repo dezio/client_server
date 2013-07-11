@@ -4,13 +4,17 @@
 #region Usings
 
 using System;
+using System.Web;
 using DeZio.Networking.Packet;
 
 #endregion
 
 namespace DeZio.Networking {
     public class ChatMessagePacket {
-        public ChatMessagePacket() {}
+
+        public ChatMessagePacket() {
+        }
+
         public String Message { get; set; }
 
         public int FromUserId { get; set; }
@@ -23,7 +27,8 @@ namespace DeZio.Networking {
                     {
                         Type = "Message",
                         Message = string.Format("from={0}&to={1}&msg={2}",
-                                                FromUserId, ToUserId, Message)
+                                                FromUserId, ToUserId, 
+                                                HttpUtility.UrlEncode(Message))
                     };
             }
         }
