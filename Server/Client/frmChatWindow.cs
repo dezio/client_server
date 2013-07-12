@@ -17,17 +17,22 @@ namespace Client {
         public ContactInfo Remote { get; set; }
         ManualResetEvent m_resetWaitLoaded = new ManualResetEvent(false);
         private delegate void onNewMessage(String msg);
-        private ClientModel Client {
-            get; set; }
+        private ClientModel Client { get; set; }
 
         public frmChatWindow(ContactInfo remote, ClientModel clt) {
             this.Remote = remote;
             this.Client = clt;
             InitializeComponent();
+            this.Text = String.Format("Chat with {0}", Remote.Username);
             pnlChat.HorizontalScroll.Enabled = false;
             pnlChat.HorizontalScroll.Visible = false;
             pnlChat.VerticalScroll.Enabled = true;
             pnlChat.VerticalScroll.Visible = true;
+        }
+
+        public override sealed string Text {
+            get { return base.Text; }
+            set { base.Text = value; }
         }
 
         public void NewMessage(String msg) {
@@ -70,8 +75,11 @@ namespace Client {
         }
 
         private void bttnSend_Click(object sender, EventArgs e) {
-            var textBox = sender as TextBox;
+            var textBox = txtChatOut;
             if (textBox != null) Client.SendMessage(textBox.Text, Remote.UserId);
+            var msgView = new Controls.ChatMessageView(ChatMessageView.MessageDirection.Outgoing, textBox.Text, Client.MyContactInfo.Username,
+                                           DateTime.Now);
+            pnlChat.Controls.Add(msgView);
             txtChatOut.Text = "";
         }
 

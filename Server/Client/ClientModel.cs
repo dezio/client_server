@@ -65,13 +65,15 @@ namespace Client {
         }
 
         public void SendMessage(String strMessage, int toUserId) {
-            var obj = new ChatMessagePacket
-                {
-                    FromUserId = MyContactInfo.UserId,
-                    ToUserId = toUserId,
-                    Message = strMessage
-                };
-            Program.Client.WritePacket(obj.Packet);
+            if (!String.IsNullOrEmpty(strMessage.Trim())) {
+                var obj = new ChatMessagePacket
+                    {
+                        FromUserId = MyContactInfo.UserId,
+                        ToUserId = toUserId,
+                        Message = strMessage
+                    };
+                Program.Client.WritePacket(obj.Packet);
+            } // if end
         }
 
         public event EventHandler<GotContactInfoEventArgs> GotContactInfo;

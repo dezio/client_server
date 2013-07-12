@@ -31,22 +31,24 @@
             this.lblPassword = new System.Windows.Forms.Label();
             this.pnlLoading = new System.Windows.Forms.Panel();
             this.lblPleaseWait = new System.Windows.Forms.Label();
+            this.picLoadingAnim = new System.Windows.Forms.PictureBox();
             this.linkRegister = new System.Windows.Forms.LinkLabel();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.lblStatus = new System.Windows.Forms.ToolStripStatusLabel();
-            this.picLoadingAnim = new System.Windows.Forms.PictureBox();
             this.lblTitle = new System.Windows.Forms.Label();
             this.checkSaveAuth = new System.Windows.Forms.CheckBox();
             this.pnlLoading.SuspendLayout();
-            this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picLoadingAnim)).BeginInit();
+            this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // bttnLogin
             // 
+            this.bttnLogin.BackColor = System.Drawing.Color.DarkGreen;
+            this.bttnLogin.ForeColor = System.Drawing.Color.Snow;
             resources.ApplyResources(this.bttnLogin, "bttnLogin");
             this.bttnLogin.Name = "bttnLogin";
-            this.bttnLogin.UseVisualStyleBackColor = true;
+            this.bttnLogin.UseVisualStyleBackColor = false;
             this.bttnLogin.Click += new System.EventHandler(this.bttnLogin_Click);
             // 
             // txtUsername
@@ -82,6 +84,13 @@
             resources.ApplyResources(this.lblPleaseWait, "lblPleaseWait");
             this.lblPleaseWait.Name = "lblPleaseWait";
             // 
+            // picLoadingAnim
+            // 
+            this.picLoadingAnim.Image = global::Client.Properties.Resources._22_1;
+            resources.ApplyResources(this.picLoadingAnim, "picLoadingAnim");
+            this.picLoadingAnim.Name = "picLoadingAnim";
+            this.picLoadingAnim.TabStop = false;
+            // 
             // linkRegister
             // 
             resources.ApplyResources(this.linkRegister, "linkRegister");
@@ -101,16 +110,9 @@
             this.lblStatus.Name = "lblStatus";
             resources.ApplyResources(this.lblStatus, "lblStatus");
             // 
-            // picLoadingAnim
-            // 
-            this.picLoadingAnim.Image = global::Client.Properties.Resources._22_1;
-            resources.ApplyResources(this.picLoadingAnim, "picLoadingAnim");
-            this.picLoadingAnim.Name = "picLoadingAnim";
-            this.picLoadingAnim.TabStop = false;
-            // 
             // lblTitle
             // 
-            this.lblTitle.BackColor = System.Drawing.Color.Blue;
+            this.lblTitle.BackColor = System.Drawing.Color.DarkGreen;
             resources.ApplyResources(this.lblTitle, "lblTitle");
             this.lblTitle.ForeColor = System.Drawing.Color.White;
             this.lblTitle.Name = "lblTitle";
@@ -147,9 +149,9 @@
             this.Load += new System.EventHandler(this.frmLogin_Load);
             this.Shown += new System.EventHandler(this.frmLogin_Shown);
             this.pnlLoading.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.picLoadingAnim)).EndInit();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.picLoadingAnim)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 

@@ -42,7 +42,7 @@ namespace Server {
             return contactInfo;
         }
 
-        private MySqlDataReader Reader(String strSql) {
+        public MySqlDataReader Reader(String strSql) {
             using (var cmd = db.CreateCommand()) {
                 cmd.CommandText = strSql;
                 return cmd.ExecuteReader();

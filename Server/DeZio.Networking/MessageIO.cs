@@ -18,8 +18,9 @@ using DeZio.Networking.Packet;
 namespace DeZio.Networking {
     public class MessageIO : IDisposable {
         private bool m_bStarted = false;
-        private bool m_bUseCrypto = false;
+        private bool m_bUseCrypto = true;
         private Task m_taskReader;
+        public event EventHandler OnDisconnection;
 
         /// <summary>
         /// Initializes a new MessageIO object.
@@ -77,33 +78,53 @@ namespace DeZio.Networking {
         /// when a packet arrived.
         /// </summary>
         private void ReadLoop() {
+            var reader = new StreamReader(Stream);
             while (m_bStarted) {
-                Console.WriteLine(string.Format("MessageIO[{0}]: Waiting for input.", Context));
-                var reader = new StreamReader(Stream);
-                String strLine;
-                var sbRawSessInf = new StringBuilder();
-                while ((strLine = reader.ReadLine()) != null && m_bStarted) {
-                    sbRawSessInf.AppendLine(strLine);
-                    var typeOfPacket = typeof (MessagePacket).Name;
-                    if (strLine.Trim().EndsWith(String.Format("</{0}>", typeOfPacket))) {
-                        break;
+                try {
+                    Console.WriteLine(string.Format("MessageIO[{0}]: Waiting for input.", Context));
+                    String strLine;
+                    var sbRawSessInf = new StringBuilder();
+                    if (reader.EndOfStream) {
+                        Console.WriteLine("An user was disconnected.");
+                        if (OnDisconnection != null) {
+                            OnDisconnection(this, null);
+                        } // if end
+                        return;
                     } // if end
-                } // while end
-                if (strLine == null)
-                    continue;
-                Console.ForegroundColor = ConsoleColor.Cyan;
-                Console.WriteLine(string.Format("MessageIO[{0}] <<<: ", Context));
-                Console.ForegroundColor = ConsoleColor.White;
-                Console.WriteLine("{0}", sbRawSessInf);
-                ConsoleExtension.PrintHorizontalLine();
-                var pack = MessagePacket.PacketFromString(sbRawSessInf.ToString());
-                if (m_bUseCrypto) {
-                    pack.Message = Crypto.DecryptStringAES(pack.Message, CurrentSession.EncryptKey);
-                    pack.Type = Crypto.DecryptStringAES(pack.Type, CurrentSession.EncryptKey);
-                } // if end
-                if (PacketArrived != null)
-                    PacketArrived(pack, null);
+                    while ((strLine = reader.ReadLine()) != null && m_bStarted) {
+                        sbRawSessInf.AppendLine(strLine);
+                        var typeOfPacket = typeof (MessagePacket).Name;
+                        if (strLine.Trim().EndsWith(String.Format("</{0}>", typeOfPacket))) {
+                            break;
+                        } // if end
+                    } // while end
+                    if (strLine == null)
+                        continue;
+                    Console.ForegroundColor = ConsoleColor.Cyan;
+                    Console.WriteLine(string.Format("MessageIO[{0}] <<<: ", Context));
+                    Console.ForegroundColor = ConsoleColor.White;
+                    Console.WriteLine("{0}", sbRawSessInf);
+                    ConsoleExtension.PrintHorizontalLine();
+                    var pack = MessagePacket.PacketFromString(sbRawSessInf.ToString());
+                    if (m_bUseCrypto) {
+                        pack.Message = Crypto.DecryptStringAES(pack.Message, CurrentSession.EncryptKey);
+                        pack.Type = Crypto.DecryptStringAES(pack.Type, CurrentSession.EncryptKey);
+                    } // if end
+                    if (PacketArrived != null)
+                        PacketArrived(pack, null);
+                }
+                catch (System.IO.IOException) {
+                    Console.WriteLine("An user was disconnected.");
+
+                    return;
+                } // catch end
             } // while end
+        }
+
+        private void onDisconnected() {
+            if (OnDisconnection != null) {
+                OnDisconnection(this, null);
+            } // if end
         }
 
         /// <summary>
@@ -114,7 +135,10 @@ namespace DeZio.Networking {
         public void WritePacket(MessagePacket p, bool bWithEncKey = false) {
             Thread.Sleep(50);
             if (m_taskReader.IsCanceled) {
-                
+                if (OnDisconnection != null) {
+                    OnDisconnection(this, null);
+                } // if end
+                return;
             } // if end
             p.Session = CurrentSession;
             if (!String.IsNullOrEmpty(p.Message) && m_bUseCrypto) {
@@ -131,14 +155,23 @@ namespace DeZio.Networking {
                 sbSafePacket.AppendLine(strLine.TrimEnd());
             } // if end
 
-            Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.WriteLine(string.Format("MessageIO[{0}] >>>:", Context));
-            Console.ForegroundColor = ConsoleColor.White;
-            Console.WriteLine("{0}", sbSafePacket);
-            ConsoleExtension.PrintHorizontalLine();
-            var streamWriter = new StreamWriter(Stream);
-            streamWriter.WriteLine(sbSafePacket);
-            streamWriter.Flush();
+            
+            if (Stream.CanWrite) {
+                try {
+                    var streamWriter = new StreamWriter(Stream);
+                    streamWriter.WriteLine(sbSafePacket);
+                    streamWriter.Flush();
+
+                    Console.ForegroundColor = ConsoleColor.Cyan;
+                    Console.WriteLine(string.Format("MessageIO[{0}] >>>:", Context));
+                    Console.ForegroundColor = ConsoleColor.White;
+                    Console.WriteLine("{0}", sbSafePacket);
+                    ConsoleExtension.PrintHorizontalLine();
+                }
+                catch (IOException) {
+                    onDisconnected();
+                }
+            } // if end
         }
 
         /// <summary>

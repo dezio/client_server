@@ -10,8 +10,8 @@ namespace Client {
     class LocalSettings {
         private const String SubKey = @"Software\DeZio\CryptoChatClient";
         public static void Set(String key, String value) {
-            Registry.CurrentUser.CreateSubKey(SubKey);
-            using (var regKey = Registry.CurrentUser.OpenSubKey(SubKey)) {
+            Registry.CurrentUser.CreateSubKey(SubKey, RegistryKeyPermissionCheck.ReadWriteSubTree, RegistryOptions.None);
+            using (var regKey = Registry.CurrentUser.OpenSubKey(SubKey, true)) {
                 regKey.SetValue(key, value);
             } // using end
         }

@@ -20,6 +20,7 @@ namespace Client {
             if (LocalSettings.Get("saveAuth") == true.ToString()) {
                 txtUsername.Text = LocalSettings.Get("username");
                 txtPassword.Text = LocalSettings.Get("pw");
+                checkSaveAuth.Checked = true;
             } // if end
         }
 
@@ -54,6 +55,7 @@ namespace Client {
                 LocalSettings.Set("pw", "");
                 LocalSettings.Set("saveAuth", false.ToString());
             } // else end
+
             Task.Run(() => {
                 if (m_bLoginLocked)
                     return;

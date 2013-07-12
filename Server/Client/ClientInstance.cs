@@ -51,6 +51,7 @@ namespace Client {
 
         public event EventHandler GotPacket;
         public event EventHandler GotLoggedIn;
+        public event EventHandler ConnectionClosed;
         public event EventHandler<Events.GotContactInfoEventArgs> GotMyInfo;
         public event EventHandler<Events.GotContactInfoEventArgs> GotContactInfo;
         public event EventHandler<Events.GotChatMessageEventArgs> GotChatMessage;
@@ -107,13 +108,13 @@ namespace Client {
         }
 
         public void Authenticate(String username, String pw = "") {
-            if (MessagePort < 0) {
+            if (MessagePort <= 0) {
                 throw new Exception("You are not connected to the server.");
             } // if end
 
             WritePacket(new MessagePacket()
                 {
-                    Message = string.Format("username={0}&pw={1}", username, pw),
+                    Message = string.Format("username={0}&pw={1}&appVersion={2}", username, pw, Application.ProductVersion),
                     Type = "Login"
                 });
         }
@@ -125,6 +126,12 @@ namespace Client {
             IO = new MessageIO(m_clientMessageServer.GetStream(), "Client");
             IO.SetSession(CurrentSession);
             IO.PacketArrived += ReaderOnPacketArrived;
+            IO.OnDisconnection += delegate(object sender, EventArgs args) {
+                IO.Stop();
+                if (ConnectionClosed != null) {
+                    ConnectionClosed(this, null);
+                } // if end
+            };
             IO.Start();
             IO.WritePacket(new MessagePacket(), true);
             Console.WriteLine("Connected to messageServer at {0}",
@@ -155,7 +162,6 @@ namespace Client {
                     EncryptKey = encKey,
                     SessionId = sid
                 };
-
             MessagePort = int.Parse(msgPort);
         }
 

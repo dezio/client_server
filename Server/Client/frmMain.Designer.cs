@@ -30,6 +30,8 @@
             this.menuMain = new System.Windows.Forms.MenuStrip();
             this.toolStripItemFile = new System.Windows.Forms.ToolStripMenuItem();
             this.abmeldenUndBeendenToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.kontakteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.suchenToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuMain.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -39,14 +41,15 @@
             this.treeContacts.ImageIndex = 2;
             this.treeContacts.ImageList = this.imageListContactState;
             this.treeContacts.ItemHeight = 24;
-            this.treeContacts.Location = new System.Drawing.Point(12, 52);
+            this.treeContacts.Location = new System.Drawing.Point(12, 27);
             this.treeContacts.Name = "treeContacts";
             this.treeContacts.SelectedImageIndex = 2;
             this.treeContacts.ShowLines = false;
             this.treeContacts.ShowPlusMinus = false;
             this.treeContacts.ShowRootLines = false;
-            this.treeContacts.Size = new System.Drawing.Size(354, 466);
+            this.treeContacts.Size = new System.Drawing.Size(354, 491);
             this.treeContacts.TabIndex = 0;
+            this.treeContacts.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.treeContacts_NodeMouseDoubleClick);
             // 
             // imageListContactState
             // 
@@ -59,7 +62,8 @@
             // menuMain
             // 
             this.menuMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripItemFile});
+            this.toolStripItemFile,
+            this.kontakteToolStripMenuItem});
             this.menuMain.Location = new System.Drawing.Point(0, 0);
             this.menuMain.Name = "menuMain";
             this.menuMain.Size = new System.Drawing.Size(378, 24);
@@ -81,6 +85,21 @@
             this.abmeldenUndBeendenToolStripMenuItem.Text = "Abmelden und &Beenden";
             this.abmeldenUndBeendenToolStripMenuItem.Click += new System.EventHandler(this.abmeldenUndBeendenToolStripMenuItem_Click);
             // 
+            // kontakteToolStripMenuItem
+            // 
+            this.kontakteToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.suchenToolStripMenuItem});
+            this.kontakteToolStripMenuItem.Name = "kontakteToolStripMenuItem";
+            this.kontakteToolStripMenuItem.Size = new System.Drawing.Size(66, 20);
+            this.kontakteToolStripMenuItem.Text = "&Kontakte";
+            // 
+            // suchenToolStripMenuItem
+            // 
+            this.suchenToolStripMenuItem.Name = "suchenToolStripMenuItem";
+            this.suchenToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.suchenToolStripMenuItem.Text = "&Suchen";
+            this.suchenToolStripMenuItem.Click += new System.EventHandler(this.suchenToolStripMenuItem_Click);
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -90,6 +109,7 @@
             this.Controls.Add(this.menuMain);
             this.MainMenuStrip = this.menuMain;
             this.Name = "frmMain";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "frmMain";
             this.menuMain.ResumeLayout(false);
             this.menuMain.PerformLayout();
@@ -105,5 +125,7 @@
         private System.Windows.Forms.MenuStrip menuMain;
         private System.Windows.Forms.ToolStripMenuItem toolStripItemFile;
         private System.Windows.Forms.ToolStripMenuItem abmeldenUndBeendenToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem kontakteToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem suchenToolStripMenuItem;
     }
 }

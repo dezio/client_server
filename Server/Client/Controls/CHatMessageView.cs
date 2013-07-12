@@ -60,11 +60,12 @@ namespace Client.Controls {
 
             var ftMessage = new Font("Arial", 12);
 
-            m_lblSender.AutoSize = false;
+            m_lblSender.AutoSize = true;
             m_lblSender.Dock = DockStyle.Top;
-            m_lblSender.Text = sender;
+            m_lblSender.Text = String.Format("{0} sagt: ", sender);
             m_lblSender.Height = 20;
             m_lblSender.BackColor = Color.Transparent;
+            m_lblSender.ForeColor = Color.White;
             m_lblSender.Font = new Font(ftMessage, FontStyle.Bold);
             this.Controls.Add(m_lblSender);
 
@@ -73,23 +74,32 @@ namespace Client.Controls {
             m_lblMessage.Location = new Point(0, 22);
             m_lblMessage.TextAlign = ContentAlignment.TopLeft;
             m_lblMessage.Font = ftMessage;
+            m_lblMessage.ForeColor = Color.White;
             m_lblMessage.BackColor = Color.Transparent;
             this.Controls.Add(m_lblMessage);
 
             this.BackColor = Color.White;
             this.Height = m_lblMessage.Height + m_lblSender.Height + 28;
             this.Width = m_lblMessage.Width + 10;
+            this.MinimumSize = new Size(300, 28);
             this.Padding = new Padding(5);
             this.Margin = new Padding(5);
+            if (msgDirection == MessageDirection.Incoming) {
+                this.Padding = new Padding(40, 5, 40, 5);
+                this.Width = m_lblMessage.Width + 40;
+            }
         }
 
         protected override void OnPaint(PaintEventArgs e) {
             base.OnPaint(e);
-            var blendBrush = new LinearGradientBrush(new Rectangle(0, 0, this.Width, this.Height), 
-                Color.LightGray, Color.White, 90f);
+            var blendBrush = new LinearGradientBrush(new Rectangle(0, 0, this.Width, this.Height + 100),
+                Color.DarkGreen, Color.Green, 45f);
+            e.Graphics.FillRectangle(blendBrush, 0, 0, Width, Height);
+            e.Graphics.DrawRectangle(Pens.ForestGreen, 0, 0, Width -1 , Height -1);
+            blendBrush.Dispose();
 
-            DrawRoundRect(e.Graphics, Pens.Silver, blendBrush, this.Padding.All, this.Padding.All,
-                          m_lblMessage.Width + this.Padding.All + 10, this.Height - 10, 4);
+            //DrawRoundRect(e.Graphics, Pens.Silver, blendBrush, this.Padding.All, this.Padding.All,
+            //              m_lblMessage.Width + this.Padding.All + 10, this.Height - 10, 4);
         }
 
         public void DrawRoundRect(Graphics g, Pen p, Brush brushFill, float x, float y, float width, float height, float radius) {

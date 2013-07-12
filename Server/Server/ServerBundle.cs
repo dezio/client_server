@@ -3,19 +3,29 @@
 
 namespace Server {
     internal class ServerBundle {
-        private readonly MessageServer _messageServer = new MessageServer();
-        private readonly SessionServer _sessionServer = new SessionServer();
+        private MessageServer _messageServer = new MessageServer();
+        private SessionServer _sessionServer = new SessionServer();
 
         public ServerBundle() {}
 
+        public MessageServer MessageServer {
+            get { return _messageServer; }
+            set { _messageServer = value; }
+        }
+
+        public SessionServer SessionServer {
+            get { return _sessionServer; }
+            set { _sessionServer = value; }
+        }
+
         public void StartBundle() {
-            _sessionServer.Start();
-            _messageServer.Start();
+            SessionServer.Start();
+            MessageServer.Start();
         }
 
         public void StopBundle() {
-            _sessionServer.Stop();
-            _messageServer.Stop();
+            SessionServer.Stop();
+            MessageServer.Stop();
         }
     }
 }

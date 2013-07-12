@@ -13,8 +13,7 @@ using DeZio.Networking;
 
 namespace Client {
     public partial class frmMain : Form {
-        private delegate void onNewMessage(GotChatMessageEventArgs ea);
-
+        private frmSearchContact m_frmSearchContact = new frmSearchContact();
         public frmMain() {
             InitializeComponent();
             ChatWindows = new List<frmChatWindow>();
@@ -24,26 +23,31 @@ namespace Client {
             Client.GotChatMessage += ClientOnGotChatMessage;
         }
 
+        private List<frmChatWindow> ChatWindows { get; set; }
+        private ClientModel Client { get; set; }
+
         private void ClientOnGotChatMessage(object sender, GotChatMessageEventArgs gotChatMessageEventArgs) {
             this.Invoke(new onNewMessage(NewMessage), gotChatMessageEventArgs);
         }
 
         private void NewMessage(GotChatMessageEventArgs ea) {
-            var chatWin = ChatWindows.Find(win => win.Remote.UserId == ea.From.UserId);
+            OpenChatWindow(ea.From).NewMessage(ea.Message);
+        }
+
+        private frmChatWindow OpenChatWindow(ContactInfo info) {
+            ChatWindows.RemoveAll(frm => frm.IsDisposed);
+            var chatWin = ChatWindows.Find(win => win.Remote.UserId == info.UserId);
             if (chatWin == null) {
-                chatWin = new frmChatWindow(ea.From, this.Client);
+                chatWin = new frmChatWindow(info, this.Client);
                 ChatWindows.Add(chatWin);
             } // if end
             chatWin.Show();
-            chatWin.NewMessage(ea.Message);
+            return chatWin;
         }
 
         private void ClientOnGotMyInfo(object sender, GotContactInfoEventArgs gotContactInfoEventArgs) {
             ProcessMyInfo(gotContactInfoEventArgs.Contact);
         }
-
-        private List<frmChatWindow> ChatWindows { get; set; } 
-        private ClientModel Client { get; set; }
 
         private void ProcessMyInfo(ContactInfo info) {
             if (this.InvokeRequired) {
@@ -60,29 +64,41 @@ namespace Client {
             } // if end
             var n = new TreeNode
                 {
-                    Text = info.Username, 
+                    Text = info.Username,
                     Tag = info
                 };
             switch (info.State) {
-                case(ContactState.Offline):
+                case (ContactState.Offline):
                     n.ImageIndex = 0;
                     break;
                 case (ContactState.Online):
                     n.ImageIndex = 1;
                     break;
             } // switch end
-            treeContacts.Nodes.Add(info.Username);
+
+            treeContacts.Nodes.Add(n);
         }
 
         private void ClientOnGotContactInfo(object sender, GotContactInfoEventArgs gotContactInfoEventArgs) {
             AddContact(gotContactInfoEventArgs.Contact);
         }
 
-        private delegate void _contactInfoMethod(ContactInfo info);
-
         private void abmeldenUndBeendenToolStripMenuItem_Click(object sender, EventArgs e) {
             Program.Client.Dispose();
             Application.Exit();
+        }
+
+        private void treeContacts_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e) {
+            var contact = e.Node.Tag as ContactInfo;
+            OpenChatWindow(contact);
+        }
+
+        private delegate void _contactInfoMethod(ContactInfo info);
+
+        private delegate void onNewMessage(GotChatMessageEventArgs ea);
+
+        private void suchenToolStripMenuItem_Click(object sender, EventArgs e) {
+            m_frmSearchContact.Show();
         }
     }
 }

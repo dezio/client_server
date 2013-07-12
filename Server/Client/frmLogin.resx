@@ -123,10 +123,10 @@
   </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="bttnLogin.Location" type="System.Drawing.Point, System.Drawing">
-    <value>263, 125</value>
+    <value>337, 71</value>
   </data>
   <data name="bttnLogin.Size" type="System.Drawing.Size, System.Drawing">
-    <value>75, 23</value>
+    <value>75, 59</value>
   </data>
   <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="bttnLogin.TabIndex" type="System.Int32, mscorlib">
@@ -148,10 +148,10 @@
     <value>9</value>
   </data>
   <data name="txtUsername.Location" type="System.Drawing.Point, System.Drawing">
-    <value>110, 60</value>
+    <value>98, 71</value>
   </data>
   <data name="txtUsername.Size" type="System.Drawing.Size, System.Drawing">
-    <value>228, 21</value>
+    <value>228, 22</value>
   </data>
   <data name="txtUsername.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -169,10 +169,10 @@
     <value>8</value>
   </data>
   <data name="txtPassword.Location" type="System.Drawing.Point, System.Drawing">
-    <value>110, 98</value>
+    <value>98, 109</value>
   </data>
   <data name="txtPassword.Size" type="System.Drawing.Size, System.Drawing">
-    <value>228, 21</value>
+    <value>228, 22</value>
   </data>
   <data name="txtPassword.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
@@ -196,10 +196,10 @@
     <value>NoControl</value>
   </data>
   <data name="lblUsername.Location" type="System.Drawing.Point, System.Drawing">
-    <value>28, 63</value>
+    <value>16, 74</value>
   </data>
   <data name="lblUsername.Size" type="System.Drawing.Size, System.Drawing">
-    <value>59, 13</value>
+    <value>61, 13</value>
   </data>
   <data name="lblUsername.TabIndex" type="System.Int32, mscorlib">
     <value>3</value>
@@ -226,10 +226,10 @@
     <value>NoControl</value>
   </data>
   <data name="lblPassword.Location" type="System.Drawing.Point, System.Drawing">
-    <value>28, 98</value>
+    <value>16, 109</value>
   </data>
   <data name="lblPassword.Size" type="System.Drawing.Size, System.Drawing">
-    <value>57, 13</value>
+    <value>59, 13</value>
   </data>
   <data name="lblPassword.TabIndex" type="System.Int32, mscorlib">
     <value>4</value>
@@ -334,7 +334,7 @@
     <value>NoControl</value>
   </data>
   <data name="linkRegister.Location" type="System.Drawing.Point, System.Drawing">
-    <value>28, 127</value>
+    <value>334, 139</value>
   </data>
   <data name="linkRegister.Size" type="System.Drawing.Size, System.Drawing">
     <value>78, 21</value>
@@ -370,7 +370,7 @@
     <value>0, 179</value>
   </data>
   <data name="statusStrip1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>379, 22</value>
+    <value>436, 22</value>
   </data>
   <data name="statusStrip1.TabIndex" type="System.Int32, mscorlib">
     <value>7</value>
@@ -400,7 +400,7 @@
     <value>0, 0</value>
   </data>
   <data name="lblTitle.Size" type="System.Drawing.Size, System.Drawing">
-    <value>379, 47</value>
+    <value>436, 47</value>
   </data>
   <data name="lblTitle.TabIndex" type="System.Int32, mscorlib">
     <value>8</value>
@@ -424,10 +424,10 @@
     <value>1</value>
   </data>
   <data name="checkSaveAuth.Location" type="System.Drawing.Point, System.Drawing">
-    <value>110, 129</value>
+    <value>98, 131</value>
   </data>
   <data name="checkSaveAuth.Size" type="System.Drawing.Size, System.Drawing">
-    <value>147, 19</value>
+    <value>147, 29</value>
   </data>
   <data name="checkSaveAuth.TabIndex" type="System.Int32, mscorlib">
     <value>9</value>
@@ -454,13 +454,10 @@
     <value>6, 13</value>
   </data>
   <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
-    <value>379, 201</value>
+    <value>436, 201</value>
   </data>
   <data name="$this.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Tahoma, 8.25pt</value>
-  </data>
-  <data name="$this.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
+    <value>Segoe UI, 8.25pt</value>
   </data>
   <data name="$this.StartPosition" type="System.Windows.Forms.FormStartPosition, System.Windows.Forms">
     <value>CenterScreen</value>

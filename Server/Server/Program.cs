@@ -5,10 +5,12 @@ using System;
 
 namespace Server {
     internal class Program {
+        public static ServerBundle Bundle {
+            get; set; }
         private static void Main(string[] args) {
             Console.ForegroundColor = ConsoleColor.White;
-            ServerBundle bundle = new ServerBundle();
-            bundle.StartBundle();
+            Bundle = new ServerBundle();
+            Bundle.StartBundle();
         }
     }
 }

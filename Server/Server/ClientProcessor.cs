@@ -12,11 +12,13 @@ using System.Threading;
 using System.Web;
 using DeZio.Networking;
 using DeZio.Networking.Packet;
+using Server.Processors.Packet;
 
 #endregion
 
 namespace Server {
     public class ClientProcessor {
+
         public ClientProcessor(TcpClient clt) {
             Client = clt;
             Stream = new NetworkStream(clt.Client);
@@ -29,6 +31,8 @@ namespace Server {
         public MessageIO IO { get; set; }
         public TcpClient Client { get; private set; }
         public Session CurrentSession { get; private set; }
+        public Version RemoteAppVersion {
+            get; private set; }
         public ContactInfo Contact {
             get; set; }
         private NetworkStream Stream { get; set; }
@@ -54,12 +58,23 @@ namespace Server {
         }
 
         private void SendContactsList() {
+            var rand = new Random();
+            var userServerPacket = new MessagePacket {
+                Type = "Contact",
+                Message = String.Format(
+                    "username={0}&state={1}&userid={2}",
+                    string.Format("Server"),
+                    ((int)ContactState.NonExist),
+                    -1)
+            };
+            Thread.Sleep(40);
+            IO.WritePacket(userServerPacket);
             for (var i = 0; i < 10; i++) {
                 var userPacket = new MessagePacket {
                     Type = "Contact",
                     Message = String.Format(
                         "username={0}&state={1}&userid={2}",
-                        string.Format("User_Testservice_{0}", i), 
+                        string.Format("User_Testservice_{0}", rand.Next(100, 200+i)), 
                         ((int)ContactState.Offline), 
                         -1)
                 };
@@ -78,15 +93,25 @@ namespace Server {
             if (p.Type == "Message") {
                 MessageProcessor.Instance.IncomingMessage(p);
             } // if end
+            if (p.Type == "SearchContact") {
+                var proc = new SearchContact(p);
+                proc.Requirements.Add("client", this);
+                proc.Do();
+            } // if end
+            if (p.Type == "AddContact") {
+                
+            } // if end
             if (p.Type == "Login") {
                 if (p.Session.SessionId == CurrentSession.SessionId) {
                     var msgQuery = HttpUtility.ParseQueryString(p.Message);
                     var username = msgQuery["username"];
                     var pw = Crypto.GetMd5Hash(msgQuery["pw"]);
+                    var appVersion = msgQuery["appVersion"];
+                    RemoteAppVersion = new Version(appVersion);
                     using (var dbHelper = new DatabaseHelper()) {
                         var userInfo = dbHelper.Authenticate(username, pw);
                         if (userInfo.State != ContactState.NonExist) {
-                            Console.WriteLine(username + " tries to log in.");
+                            Console.WriteLine(username + @" tries to log in.");
                             IO.WritePacket(MessagePacket.GetOkPacket("Login"));
                             var userPacket = new MessagePacket
                                 {
@@ -101,7 +126,10 @@ namespace Server {
                             var msgPacketDummy = new MessagePacket() {
                                 Type = "Message",
                                 Message = string.Format("from={0}&to={1}&msg={2}",
-                                "-1", Contact.UserId, string.Format("Welcome. You are online as {0} with the user ID {1}.\nYour current sessionId is: {2}", Contact.Username, Contact.UserId, CurrentSession.SessionId))
+                                "-1", Contact.UserId, string.Format("Welcome. " +
+                                                                    "You are online as {0} with the user ID {1}." +
+                                                                    "\nYour current sessionId is: {2}" +
+                                                                    "\nYour appVersion is {3}", Contact.Username, Contact.UserId, CurrentSession.SessionId, RemoteAppVersion))
                             };
                             MessageProcessor.Instance.IncomingMessage(msgPacketDummy);
                         } // if end
